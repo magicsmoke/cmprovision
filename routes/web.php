@@ -10,6 +10,7 @@ use App\Http\Livewire\Firmwares;
 use App\Http\Livewire\Settings;
 use App\Http\Controllers\AddImageController;
 use App\Http\Controllers\ScriptExecuteController;
+use App\Http\Controllers\SitePasswordController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,21 +24,29 @@ use App\Http\Controllers\ScriptExecuteController;
 */
 
 Route::get('/', function () {
-    //return view('welcome');
+    if (empty(config('app.password'))) {
+        return redirect('/dashboard');
+    }
     return redirect()->route('login');
 });
 
-Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
-    return view('dashboard', ['log' => \App\Models\Cmlog::orderBy('id','desc')->limit(100)->get()] );
-})->name('dashboard');
+Route::get('/login', [SitePasswordController::class, 'showForm'])->name('login');
+Route::post('/login', [SitePasswordController::class, 'login']);
+Route::post('/logout', [SitePasswordController::class, 'logout'])->name('logout');
 
-Route::middleware(['auth:sanctum', 'verified'])->any('/cms', Cms::class)->name('cms');
-Route::middleware(['auth:sanctum', 'verified'])->any('/images', Images::class)->name('images');
-Route::middleware(['auth:sanctum', 'verified'])->post('/addImage', [AddImageController::class, 'store']);
-Route::middleware(['auth:sanctum', 'verified'])->any('/projects', Projects::class)->name('projects');
-Route::middleware(['auth:sanctum', 'verified'])->any('/scripts', Scripts::class)->name('scripts');
-Route::middleware(['auth:sanctum', 'verified'])->any('/labels', Labels::class)->name('labels');
-Route::middleware(['auth:sanctum', 'verified'])->any('/firmware', Firmwares::class)->name('firmware');
-Route::middleware(['auth:sanctum', 'verified'])->any('/settings', Settings::class)->name('settings');
+Route::middleware(['site.password'])->group(function () {
+    Route::get('/dashboard', function () {
+        return view('dashboard', ['log' => \App\Models\Cmlog::orderBy('id','desc')->limit(100)->get()] );
+    })->name('dashboard');
+
+    Route::any('/cms', Cms::class)->name('cms');
+    Route::any('/images', Images::class)->name('images');
+    Route::post('/addImage', [AddImageController::class, 'store']);
+    Route::any('/projects', Projects::class)->name('projects');
+    Route::any('/scripts', Scripts::class)->name('scripts');
+    Route::any('/labels', Labels::class)->name('labels');
+    Route::any('/firmware', Firmwares::class)->name('firmware');
+    Route::any('/settings', Settings::class)->name('settings');
+});
 
 Route::any('/scriptexecute', ScriptExecuteController::class);

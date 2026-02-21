@@ -18,7 +18,10 @@ class Images extends Component
     {
         $this->images = Image::orderBy('filename')->orderBy('id')->get();
         $this->maxfilesize = UploadedFile::getMaxFilesize();
-        $this->freediskspace = min( disk_free_space("/tmp"), disk_free_space(public_path("uploads")));
+        $uploadsPath = public_path("uploads");
+        $this->freediskspace = is_dir($uploadsPath)
+            ? min( disk_free_space("/tmp"), disk_free_space($uploadsPath))
+            : disk_free_space("/tmp");
         $this->os32bit = (PHP_INT_MAX == 2147483647);
 
         return view('livewire.images');
