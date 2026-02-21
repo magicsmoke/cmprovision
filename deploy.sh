@@ -20,7 +20,7 @@ fi
 
 echo "Deploying to $INSTALL_DIR..."
 
-sudo rsync -av --delete \
+sudo rsync -av \
     --exclude='.git' \
     --exclude='docker*' \
     --exclude='Dockerfile*' \
