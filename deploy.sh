@@ -3,6 +3,9 @@
 # Deploy cmprovision from a git clone to the installed location at /var/lib/cmprovision.
 # Run this on the Raspberry Pi from inside the cloned repo directory.
 #
+# Prerequisites:
+#   composer install --optimize-autoloader --no-dev
+#
 
 set -e
 
@@ -18,11 +21,19 @@ if [ ! -f "artisan" ]; then
     exit 1
 fi
 
+if [ ! -f "vendor/autoload.php" ]; then
+    echo "Error: vendor/ not found. Run 'composer install --optimize-autoloader --no-dev' first."
+    exit 1
+fi
+
 echo "Deploying to $INSTALL_DIR..."
 
 sudo rsync -av \
     --exclude='.git' \
-    --exclude='docker*' \
+    --exclude='.gitignore' \
+    --exclude='.gitattributes' \
+    --exclude='node_modules/' \
+    --exclude='docker/' \
     --exclude='Dockerfile*' \
     --exclude='docker-compose*' \
     --exclude='.env' \
