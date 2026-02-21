@@ -2,6 +2,16 @@
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 
+/* Brighten semantic buttons in dark mode for better contrast */
+.dark .bg-blue-500 { --tw-bg-opacity: 1; background-color: rgba(96, 165, 250, var(--tw-bg-opacity)); } /* blue-400 */
+.dark .bg-blue-500:hover { background-color: rgba(147, 197, 253, var(--tw-bg-opacity)); } /* blue-300 */
+.dark .bg-red-500 { --tw-bg-opacity: 1; background-color: rgba(248, 113, 113, var(--tw-bg-opacity)); } /* red-400 */
+.dark .bg-red-500:hover { background-color: rgba(252, 165, 165, var(--tw-bg-opacity)); } /* red-300 */
+.dark .bg-green-500 { --tw-bg-opacity: 1; background-color: rgba(52, 211, 153, var(--tw-bg-opacity)); } /* green-400 */
+.dark .bg-green-500:hover { background-color: rgba(110, 231, 183, var(--tw-bg-opacity)); } /* green-300 */
+.dark .bg-green-600 { --tw-bg-opacity: 1; background-color: rgba(16, 185, 129, var(--tw-bg-opacity)); } /* green-500 */
+.dark .bg-green-600:hover { background-color: rgba(52, 211, 153, var(--tw-bg-opacity)); } /* green-400 */
+
 /* nunito-regular - latin */
 @font-face {
     font-family: 'Nunito';
