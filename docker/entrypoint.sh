@@ -46,6 +46,12 @@ else
     php artisan migrate --force
 fi
 
+# Rewrite dnsmasq config paths for Docker layout
+DNSMASQ_CONF=/var/www/html/etc/dnsmasq.conf
+if [ -f "$DNSMASQ_CONF" ]; then
+    sed -i 's|/var/lib/cmprovision|/var/www/html|g' "$DNSMASQ_CONF"
+fi
+
 # Cache configuration for production
 php artisan config:cache
 php artisan route:cache
