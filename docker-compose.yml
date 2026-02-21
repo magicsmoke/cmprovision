@@ -1,0 +1,12 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - "8080:80"
+    volumes:
+      - .:/var/lib/cmprovision
+    environment:
+      - APP_ENV=local
+      - APP_DEBUG=true

@@ -1,0 +1,46 @@
+FROM php:8.1-fpm-bookworm
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    nginx \
+    supervisor \
+    sqlite3 \
+    libsqlite3-dev \
+    libsnmp-dev \
+    libzip-dev \
+    libxml2-dev \
+    libonig-dev \
+    unzip \
+    curl \
+    gzip \
+    xz-utils \
+    bzip2 \
+    && docker-php-ext-install \
+    pdo_sqlite \
+    bcmath \
+    mbstring \
+    xml \
+    zip \
+    snmp \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+# PHP-FPM config: increase upload limits
+RUN { \
+    echo "upload_max_filesize = 8G"; \
+    echo "post_max_size = 8G"; \
+    echo "max_input_time = 86400"; \
+    echo "max_execution_time = 86400"; \
+    echo "memory_limit = 512M"; \
+} > /usr/local/etc/php/conf.d/uploads.ini
+
+COPY docker/nginx.conf /etc/nginx/sites-available/default
+COPY docker/supervisord.conf /etc/supervisor/conf.d/cmprovision.conf
+COPY docker/entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+WORKDIR /var/lib/cmprovision
+
+EXPOSE 80
+
+ENTRYPOINT ["/entrypoint.sh"]
