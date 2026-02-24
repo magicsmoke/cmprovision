@@ -31,7 +31,7 @@
               </div>
               <div class="mb-4">
                   <label class="inline-flex items-center">
-                    <input type="checkbox" id="bg" name="bg" wire:model.defer="bg" class="form-checkbox h-6 w-6 text-gray-700 dark:text-gray-200">
+                    <input type="checkbox" id="bg" name="bg" wire:model.defer="bg" class="form-checkbox h-6 w-6 text-indigo-600 dark:bg-gray-700 dark:border-gray-600">
                     <span class="ml-3 text-sm">Run in background</span>
                   </label>
                   @error('bg') <span class="text-red-500">{{ $message }}</span>@enderror
