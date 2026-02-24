@@ -138,12 +138,15 @@ umount /mnt/root
 
 echo "Serial $SERIAL written to rootfs"
 
-# Print label
+# Print label (non-fatal — don't fail provisioning if printing fails)
 echo "Printing label ..."
-curl --silent --show-error --fail --max-time 30 \
+if curl --silent --show-error --fail --max-time 30 \
     -X POST \
-    "$PROV_API/api/print/$SERIAL"
-echo "Label printed"
+    "$PROV_API/api/print/$SERIAL"; then
+    echo "Label printed"
+else
+    echo "WARNING: Label printing failed (exit code $?) — continuing anyway"
+fi
 EOF;
 
         DB::table('scripts')->insert([
