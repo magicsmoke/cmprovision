@@ -29,13 +29,10 @@ sed -i 's| init=/usr/lib/raspi-config/init_resize\.sh||' /mnt/boot/cmdline.txt
 umount /mnt/boot
 EOF;
 
-        DB::table('scripts')->insert([
-            'name' => 'Resize ext4 partition',
-            'script_type' => 'postinstall',
-            'priority' => 50,
-            'bg' => false,
-            'script' => $script
-        ]);
+        DB::table('scripts')->updateOrInsert(
+            ['name' => 'Resize ext4 partition'],
+            ['script_type' => 'postinstall', 'priority' => 50, 'bg' => false, 'script' => $script]
+        );
 
         $script = <<<'EOF'
 #!/bin/sh
@@ -47,13 +44,10 @@ echo "dtoverlay=dwc2,dr_mode=host" >> /mnt/boot/config.txt
 umount /mnt/boot
 EOF;
 
-        DB::table('scripts')->insert([
-            'name' => 'Add dtoverlay=dwc2 to config.txt',
-            'script_type' => 'postinstall',
-            'priority' => 100,
-            'bg' => false,
-            'script' => $script
-        ]);
+        DB::table('scripts')->updateOrInsert(
+            ['name' => 'Add dtoverlay=dwc2 to config.txt'],
+            ['script_type' => 'postinstall', 'priority' => 100, 'bg' => false, 'script' => $script]
+        );
 
 
         $script = <<<'EOF'
@@ -67,13 +61,10 @@ if [ $? -eq 0 ]; then
 fi
 EOF;
 
-        DB::table('scripts')->insert([
-            'name' => 'Format eMMC as pSLC (one time settable only)',
-            'script_type' => 'preinstall',
-            'priority' => 100,
-            'bg' => false,
-            'script' => $script
-        ]);
+        DB::table('scripts')->updateOrInsert(
+            ['name' => 'Format eMMC as pSLC (one time settable only)'],
+            ['script_type' => 'preinstall', 'priority' => 100, 'bg' => false, 'script' => $script]
+        );
 
         $script = <<<'EOF'
 #!/bin/sh
@@ -149,12 +140,9 @@ else
 fi
 EOF;
 
-        DB::table('scripts')->insert([
-            'name' => 'Assign serial number and print label',
-            'script_type' => 'postinstall',
-            'priority' => 200,
-            'bg' => false,
-            'script' => $script
-        ]);
+        DB::table('scripts')->updateOrInsert(
+            ['name' => 'Assign serial number and print label'],
+            ['script_type' => 'postinstall', 'priority' => 200, 'bg' => false, 'script' => $script]
+        );
     }
 }
